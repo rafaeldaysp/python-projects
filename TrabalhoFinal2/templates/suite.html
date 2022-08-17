@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>IoT: Suíte</title>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-sm-12 text-dark text-center my-0">
+                <h1 style="font-family: 'Silkscreen', cursive;">SUÍTE</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-4 justify-content-center">
+                <div class="card border-dark text-white mt-2" style="background: linear-gradient(40deg, rgb(0, 0, 0), rgb(57, 0, 110)); ">
+                    <p id="lampada_label" class="text-center">{{gpio['lampada_suite'][0].upper()}}</p>
+                    <img id="lampada_img" src="../static/Images/{{gpio['lampada_suite'][0]+'.png'}}" height="250" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">LÂMPADA</h5>
+                        <button onclick="turn_on_lamp_handle()" name="lampada_suite" value="on" class="btn btn-outline-success p-3">ON</button> 
+                        <button onclick="turn_off_lamp_handle()" name="lampada_suite" value="off" class="btn btn-outline-danger p-3">OFF</button>
+                        <p class="mt-2">Intensidade</p>
+                        <input onchange="range_lamp_handle()" type="range" name="intensidade_lampada_suite" value="{{gpio['lampada_suite'][1]}}" class="slider mx-auto mb-4" min="0" max="65535">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card border-dark text-white mt-2" style="background: linear-gradient(40deg, rgb(0, 0, 0), rgb(57, 0, 110)); ">
+                    <p id="climatizador_label" class="text-center">{{gpio['climatizador_suite'][0].upper()}}</p>
+                    <img src="../static/Images/climatizador.png" height="250" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">CLIMATIZADOR</h5>
+                        <button onclick="turn_on_vent_handle()" name="climatizador_suite" value="on" class="btn btn-outline-success p-3">ON</button> 
+                        <button onclick="turn_off_vent_handle()" name="climatizador_suite" value="off" class="btn btn-outline-danger p-3">OFF</button>
+                        <p class="mt-2">Velocidade</p>
+                        <input onchange="range_clim_handle()" type="range" name="velocidade_climatizador_suite" value="{{gpio['climatizador_suite'][1]}}" class="slider mb-4" min="0" max="65535">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function range_lamp_handle(){
+            var intensity = document.getElementsByName("intensidade_lampada_suite")[0].value;
+            console.log(intensity)
+            fetch('/update-var?intensidade_lampada_suite='+intensity)
+            .then((response) => {
+                return response.json();
+            })
+        }
+        function range_clim_handle(){
+            var speed = document.getElementsByName("velocidade_climatizador_suite")[0].value;
+            fetch('/update-var?velocidade_climatizador_suite='+speed)
+            .then((response) => {
+                return response.json();
+            })
+        }
+    
+        function turn_on_lamp_handle(){
+            fetch('/update-var?lampada_suite=on')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("lampada_img").src="../static/Images/on.png"
+            document.getElementById("lampada_label").innerHTML = 'ON'
+        }
+        function turn_off_lamp_handle(){
+            fetch('/update-var?lampada_suite=off')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("lampada_img").src="../static/Images/off.png"
+            document.getElementById("lampada_label").innerHTML = 'OFF'
+        }
+        function turn_on_vent_handle(){
+            fetch('/update-var?climatizador_suite=on')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("climatizador_label").innerHTML = 'ON'
+        }
+        function turn_off_vent_handle(){
+            fetch('/update-var?climatizador_suite=off')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("climatizador_label").innerHTML = 'OFF'
+        }
+    </script>
+
+{% endblock %}

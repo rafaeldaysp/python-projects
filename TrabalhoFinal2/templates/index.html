@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Rafael Days</title>
+
+{% endblock %}
+
+{% block body %}
+
+<hr style="padding-bottom: 10px;">
+
+<div id="menu" class="p-2">
+<form action="/quarto" method="POST">
+    <center>
+        <button id="bt" class="btn btn-outline-dark btn-lg mb-3">Quarto</button>
+    </center>
+</form>
+<form action="/suite" method="POST">
+    <center>
+        <button id="bt" class="btn btn-outline-dark btn-lg mb-3">Suíte</button>
+    </center>
+</form>
+<form action="/sala" method="POST">
+    <center>
+        <button id="bt" class="btn btn-outline-dark btn-lg mb-3">Sala</button>
+    </center>
+</form>
+<form action="/cozinha" method="POST">
+    <center>
+        <button id="bt" class="btn btn-outline-dark btn-lg mb-4">Cozinha</button>
+    </center>
+</form>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>IoT: Cozinha</title>
+
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-sm-12 text-dark text-center my-0">
+                <h1 style="font-family: 'Silkscreen', cursive;">COZINHA</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-4 justify-content-center">
+                <div class="card border-dark text-white mt-2" style="background: linear-gradient(40deg, rgb(0, 0, 0), rgb(57, 0, 110)); ">
+                    <p id="lampada_label" class="text-center">{{gpio['lampada_cozinha'][0].upper()}}</p>
+                    <img id="lampada_img" src="../static/Images/{{gpio['lampada_cozinha'][0]+'.png'}}" height="250" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">LÂMPADA</h5>
+                        <button onclick="turn_on_lamp_handle()" name="lampada_cozinha" value="on" class="btn btn-outline-success p-3">ON</button> 
+                        <button onclick="turn_off_lamp_handle()" name="lampada_cozinha" value="off" class="btn btn-outline-danger p-3">OFF</button>
+                        <p class="mt-2">Intensidade</p>
+                        <input onchange="range_lamp_handle()" type="range" name="intensidade_lampada_cozinha" value="{{gpio['lampada_cozinha'][1]}}" class="slider mx-auto mb-4" min="0" max="65535">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card border-dark text-white mt-2" style="background: linear-gradient(40deg, rgb(0, 0, 0), rgb(57, 0, 110)); ">
+                    <p id="forno_label" class="text-center">{{gpio['forno'][0].upper()}}</p>
+                    <img id="forno_img" src="../static/Images/forno.png" height="250" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">FORNO</h5>
+                        <button onclick="turn_on_forno_handle()" name="forno" value="on" class="btn btn-outline-success p-3">ON</button> 
+                        <button onclick="turn_off_forno_handle()" name="forno" value="off" class="btn btn-outline-danger p-3">OFF</button>
+                        <p class="mt-2">Velocidade</p>
+                        <input onchange="range_forno_handle()" type="range" name="intensidade_forno" value="{{gpio['forno'][1]}}" class="slider mb-4" min="0" max="65535">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card border-dark text-white mt-2" style="background: linear-gradient(40deg, rgb(0, 0, 0), rgb(57, 0, 110)); ">
+                    <p id="liquidificador_label" class="text-center">{{gpio['liquidificador'][0].upper()}}</p>
+                    <img id="liquidificador_img" src="../static/Images/liquidificador.png" height="250" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">LIQUIDIFICADOR</h5>
+                        <button onclick="turn_on_liq_handle()" name="liquidificador" value="on" class="btn btn-outline-success p-3">ON</button> 
+                        <button onclick="turn_off_liq_handle()" name="liquidificador" value="off" class="btn btn-outline-danger p-3">OFF</button>
+                        <p class="mt-2">Velocidade</p>
+                        <input onchange="range_liq_handle()" type="range" name="velocidade_liquidificador" value="{{gpio['liquidificador'][1]}}" class="slider mb-4" min="0" max="65535">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function range_lamp_handle(){
+            var intensity = document.getElementsByName("intensidade_lampada_cozinha")[0].value;
+            console.log(intensity)
+            fetch('/update-var?intensidade_lampada_cozinha='+intensity)
+            .then((response) => {
+                return response.json();
+            })
+        }
+        function range_forno_handle(){
+            var temperature = document.getElementsByName("intensidade_forno")[0].value;
+            fetch('/update-var?intensidade_forno='+temperature)
+            .then((response) => {
+                return response.json();
+            })
+        }
+        function range_liq_handle(){
+            var speed = document.getElementsByName("velocidade_liquidificador")[0].value;
+            fetch('/update-var?velocidade_liquidificador='+speed)
+            .then((response) => {
+                return response.json();
+            })
+        }
+    
+        function turn_on_lamp_handle(){
+            fetch('/update-var?lampada_cozinha=on')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("lampada_img").src="../static/Images/on.png"
+            document.getElementById("lampada_label").innerHTML = 'ON'
+        }
+        function turn_off_lamp_handle(){
+            fetch('/update-var?lampada_cozinha=off')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("lampada_img").src="../static/Images/off.png"
+            document.getElementById("lampada_label").innerHTML = 'OFF'
+        }
+        function turn_on_forno_handle(){
+            fetch('/update-var?forno=on')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("forno_label").innerHTML = 'ON'
+        }
+        function turn_off_forno_handle(){
+            fetch('/update-var?forno=off')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("forno_label").innerHTML = 'OFF'
+        }
+        function turn_on_liq_handle(){
+            fetch('/update-var?liquidificador=on')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("liquidificador_label").innerHTML = 'ON'
+        }
+        function turn_off_liq_handle(){
+            fetch('/update-var?liquidificador=off')
+            .then((response) => {
+                return response.json();
+            })
+            document.getElementById("liquidificador_label").innerHTML = 'OFF'
+        }
+    </script>
+    
+{% endblock %}
